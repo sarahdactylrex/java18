@@ -1,0 +1,129 @@
+<!-- 
+		Name: Sarah Sheets
+		Date: 7.8.18
+		Class: CSCI2447, Javascript Fundamentals
+		Project X
+ -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+		<script src="js/jquery-3.3.1.min.js"></script>
+
+    <title>Whack-A-Mole (CSCI2447)</title>
+   <script>
+    var score = 0;
+		var remainingTime = 30;
+		var clock;
+		var t;
+		var r;
+		var k;
+		var count = 0;
+		var rand = Math.round(Math.random() * (2000 - 0));
+		
+		$(document).ready( function() {
+			$("#start_button").click( function() {
+				startGame();
+				$("#start_button").attr('disabled', 'disabled');
+			});
+			$("#gamespace").on("click", "img", function() {
+				if (remainingTime <=-1) {
+					$(this).show();
+				} else {
+					incScore();
+            		$(this).hide();
+				};
+			});
+		});
+
+function startGame() {
+		timerUpdate();
+		addMole();
+		hideMole();
+		if (remainingTime <=-1) {
+			return
+		};
+	};
+
+function getX() {
+	var xPos = Math.floor(Math.random() *500);
+	return xPos;
+};
+
+function getY() {
+	var yPos = Math.floor(Math.random() *300)
+	return yPos;
+};
+
+function timerUpdate() {
+	$('#timer').show();
+	$("#timer").html(remainingTime + " seconds left");
+	clock = setTimeout("timerUpdate();", 1000);
+	remainingTime-=1;
+	if (remainingTime <=-1) {
+		alert("Time is up! Your score is " + score +"!");
+		clearTimeout(clock);
+		clearTimeout(t);
+		clearTimeout(r);
+		clearTimeout(k);
+        location.reload();
+		$("#start_button").removeAttr('disabled', 'disabled');
+	};
+};
+
+function incScore() {
+		score+= 1;
+        $("#score").html(score + " points");
+};
+
+function addMole() {
+	count++;
+    var xPos = getX();
+    var yPos = getY();
+	
+	$("#gamespace").append('<img onclick="this.style.display=\'none\' " src="img/duck.png" style="top:'+yPos+'px;left:'+xPos+'px" id="img'+count+'" />');
+	r = setTimeout("addMole();", rand);
+	if (remainingTime <=-1) {
+		return
+	};
+};
+
+	function hideMole() {
+	$("#img'+count+'").delay(2000).fadeOut(1000);
+	k = setTimeout("hideMole();", rand);
+	if (remainingTime <=-1) {
+		return
+	};
+};
+
+		</script>   
+
+    <!-- CSS styles: This is for me to worry about; not you. -->
+	<link href="css/game.css" rel="stylesheet" />
+
+  
+  </head>
+  <body>
+
+	<div id="content">
+
+		<h1>Classic Duck Hunt!</h1>
+		
+		<p>After clicking "start", you will have 30 seconds to hit
+		as many ducks as you can. The ducks appear randomly so be ready! </p>
+		
+		<div id="controls">
+			<span id="score">0 pts</span>
+			<button type="button" id="start_button">Start!</button>
+		</div>
+		
+		<div id="timer">30 seconds left</div>
+		
+		<div id="gamespace">
+	
+
+		</div>
+		
+	</div>
+  </body>
+</html>
